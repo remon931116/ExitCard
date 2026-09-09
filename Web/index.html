@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ExitCard</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -10,45 +11,45 @@
 <body>
 
     <h1>ExitCard</h1>
-    <p>September 2026</p>
+    <p id="month-title"></p>
 
 <div class="week">
-    <span>&lt;</span>
-    <span>1</span>
-    <span>2</span>
-    <span>3</span>
-    <span>4</span>
-    <span>5</span>
-    <span>6</span>
-    <span>7</span>
-    <span>&gt;</span>
+    <button id="prev-week" class="week-arrow">&lt;</button>
+
+    <div id="week-days"></div>
+
+    <button id="next-week" class="week-arrow">&gt;</button>
 </div>
 
-<h2 class="section-title">Today</h2>
+<h2 class="section-title" id="selected-date-title">Today</h2>
 
-<div class="course">
-    <span class="time">09:10</span>
-    <span>課程名稱</span>
+<div class="course-form">
+    <select id="course-day">
+        <option value="1">星期一</option>
+        <option value="2">星期二</option>
+        <option value="3">星期三</option>
+        <option value="4">星期四</option>
+        <option value="5">星期五</option>
+        <option value="6">星期六</option>
+        <option value="7">星期日</option>
+    </select>
+
+    <input type="time" id="course-time">
+    <input type="text" id="course-name" placeholder="課程名稱">
+    <button id="add-course">+ Add Course</button>
 </div>
 
-<div class="course">
-    <span class="time">13:10</span>
-    <span>體育</span>
-</div>
-
-<div class="course">
-    <span class="time">15:10</span>
-    <span>課程名稱</span>
-</div>
+<div id="course-list"></div>
 
 <h2 class="section-title">Reminder</h2>
 
-<div class="reminder">
-    <span>體育</span>
-    <span>記得帶水壺</span>
+<div class="reminder-form">
+    <input type="text" id="reminder-course" placeholder="課程 / 事項">
+    <input type="text" id="reminder-text" placeholder="提醒內容">
+    <button id="add-reminder">+ Add Reminder</button>
 </div>
 
-<button class="add-button">+ Add Reminder</button>
+<div id="reminder-list"></div>
     <script src="script.js"></script>
 </body>
 
