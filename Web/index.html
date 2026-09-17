@@ -51,6 +51,51 @@
 
 <div id="reminder-list"></div>
     <script src="script.js"></script>
+<form
+    id="sync-form"
+    action="http://192.168.0.92/update"
+    method="POST"
+    target="sync-frame"
+>
+    <input
+        type="hidden"
+        id="sync-text"
+        name="text"
+        value="ExitCard Test"
+    >
+
+    <form
+    id="sync-form"
+    action="http://192.168.0.92/update"
+    method="POST"
+    target="sync-frame"
+>
+    <input
+        type="hidden"
+        id="sync-text"
+        name="text"
+        value=""
+    >
+
+    <button
+        type="button"
+        id="sync-exitcard"
+        onclick="syncFrameToExitCard()"
+    >
+        Sync to ExitCard
+    </button>
+    <canvas
+    id="epaper-canvas"
+    width="400"
+    height="300"
+    style="border:1px solid #ccc; margin-top:20px;">
+</canvas>
+</form>
+
+<iframe
+    name="sync-frame"
+    style="display:none;">
+</iframe>
 </body>
 
 </html>

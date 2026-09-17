@@ -497,7 +497,6 @@ function showSelectedDateTitle() {
 // ==============================
 // 7. 第一次載入網頁
 // ==============================
-
 showReminders();
 
 showWeek();
@@ -505,3 +504,250 @@ showWeek();
 showCourses();
 
 showSelectedDateTitle();
+function drawExitCard() {
+    const canvas = document.querySelector("#epaper-canvas");
+    const ctx = canvas.getContext("2d");
+
+    // 白底
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, 400, 300);
+
+    // 黑字
+    ctx.fillStyle = "black";
+
+    // 標題
+    ctx.font = "bold 24px Arial, sans-serif";
+    ctx.fillText("ExitCard", 20, 35);
+
+    const dateText =
+        document.querySelector("#selected-date-title").textContent;
+
+    ctx.font = "16px Arial, sans-serif";
+    ctx.textAlign = "right";
+    ctx.fillText(dateText, 380, 35);
+
+    ctx.textAlign = "left";
+
+    // 分隔線
+    ctx.beginPath();
+    ctx.moveTo(20, 50);
+    ctx.lineTo(380, 50);
+    ctx.stroke();
+
+    // TODAY
+    ctx.font = "bold 18px Arial, sans-serif";
+    ctx.fillText("TODAY", 20, 80);
+
+    let y = 105;
+
+    const courses =
+        document.querySelectorAll("#course-list .course");
+
+    ctx.font = '16px "Microsoft JhengHei", Arial, sans-serif';
+
+    if (courses.length === 0) {
+        ctx.fillText("今天沒有課程", 20, y);
+        y += 25;
+    } else {
+        courses.forEach(function (course) {
+            const spans = course.querySelectorAll("span");
+
+            if (spans.length >= 2) {
+                const text =
+                    spans[0].textContent.trim() +
+                    "  " +
+                    spans[1].textContent.trim();
+
+                ctx.fillText(text, 20, y);
+
+                y += 25;
+            }
+        });
+    }
+
+    // Reminder
+    y += 10;
+
+    ctx.beginPath();
+    ctx.moveTo(20, y);
+    ctx.lineTo(380, y);
+    ctx.stroke();
+
+    y += 30;
+
+    ctx.font = "bold 18px Arial, sans-serif";
+    ctx.fillText("REMINDER", 20, y);
+
+    y += 25;
+
+    ctx.font = '16px "Microsoft JhengHei", Arial, sans-serif';
+
+    const reminders =
+        document.querySelectorAll("#reminder-list .reminder");
+
+    if (reminders.length === 0) {
+        ctx.fillText("沒有提醒", 20, y);
+    } else {
+        reminders.forEach(function (reminder) {
+            const spans = reminder.querySelectorAll("span");
+
+            if (spans.length >= 2 && y < 290) {
+                const text =
+                    spans[0].textContent.trim() +
+                    "  " +
+                    spans[1].textContent.trim();
+
+                ctx.fillText(text, 20, y);
+
+                y += 24;
+            }
+        });
+    }
+}
+function syncExitCard() {
+    const syncTextInput = document.querySelector("#sync-text");
+    const syncForm = document.querySelector("#sync-form");
+
+    const dateText =
+        document.querySelector("#selected-date-title").textContent;
+
+    const courseTexts = [];
+
+    document.querySelectorAll("#course-list .course")
+        .forEach(function (course) {
+            const spans = course.querySelectorAll("span");
+
+            if (spans.length >= 2) {
+                courseTexts.push(
+                    spans[0].textContent.trim() +
+                    " " +
+                    spans[1].textContent.trim()
+                );
+            }
+        });
+
+    const reminderTexts = [];
+
+    document.querySelectorAll("#reminder-list .reminder")
+        .forEach(function (reminder) {
+            const spans = reminder.querySelectorAll("span");
+
+            if (spans.length >= 2) {
+                reminderTexts.push(
+                    spans[0].textContent.trim() +
+                    " " +
+                    spans[1].textContent.trim()
+                );
+            }
+        });
+
+    let text = "ExitCard " + dateText + "\n\n";
+
+    text += "TODAY\n";
+
+    if (courseTexts.length === 0) {
+        text += "No Course\n";
+    } else {
+        text += courseTexts.join("\n") + "\n";
+    }
+
+    text += "\nREMINDER\n";
+
+    if (reminderTexts.length === 0) {
+        text += "No Reminder";
+    } else {
+        text += reminderTexts.join("\n");
+    }
+
+    syncTextInput.value = text;
+
+    syncForm.submit();
+}
+function syncFrameToExitCard() {
+
+    // 先把最新課表 / Reminder 畫到 Canvas
+    drawExitCard();
+
+    const canvas =
+        document.querySelector("#epaper-canvas");
+
+    const ctx =
+        canvas.getContext("2d");
+
+    const imageData =
+        ctx.getImageData(0, 0, 400, 300);
+
+    const pixels = imageData.data;
+
+    // 400 x 300 / 8 = 15000 bytes
+    const bitmap =
+        new Uint8Array(15000);
+
+    for (let y = 0; y < 300; y++) {
+
+        for (let x = 0; x < 400; x++) {
+
+            const pixelIndex =
+                (y * 400 + x) * 4;
+
+            const r = pixels[pixelIndex];
+            const g = pixels[pixelIndex + 1];
+            const b = pixels[pixelIndex + 2];
+
+            // 判斷黑 / 白
+            const brightness =
+                (r + g + b) / 3;
+
+            if (brightness < 180) {
+
+                const byteIndex =
+                    y * 50 +
+                    Math.floor(x / 8);
+
+                const bit =
+                    7 - (x % 8);
+
+                bitmap[byteIndex] |=
+                    (1 << bit);
+            }
+        }
+    }
+
+    // Uint8Array → Base64
+    let binary = "";
+
+    for (let i = 0; i < bitmap.length; i++) {
+        binary +=
+            String.fromCharCode(bitmap[i]);
+    }
+
+    const base64 =
+        btoa(binary);
+
+    // 用表單送到 CrowPanel
+    const form =
+        document.createElement("form");
+
+    form.method = "POST";
+
+    form.action =
+        "http://192.168.0.92/frame";
+
+    form.target =
+        "sync-frame";
+
+    const input =
+        document.createElement("input");
+
+    input.type = "hidden";
+    input.name = "frame";
+    input.value = base64;
+
+    form.appendChild(input);
+
+    document.body.appendChild(form);
+
+    form.submit();
+
+    form.remove();
+}
