@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+
+    <style>
+        body {
+            width: 320px;
+            font-family: Arial, sans-serif;
+            padding: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 11px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        #status {
+            margin: 10px 0;
+        }
+
+        pre {
+            font-size: 11px;
+            max-height: 250px;
+            overflow: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h3>ExitCard</h3>
+
+    <button id="readBtn">
+        ① 讀取淡江課表
+    </button>
+
+    <button id="applyBtn">
+        ② 套用到 ExitCard 網站
+    </button>
+
+    <div id="status">
+        尚未同步
+    </div>
+
+    <pre id="result"></pre>
+
+    <script src="popup.js"></script>
+
+</body>
+
+</html>

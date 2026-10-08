@@ -4,98 +4,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>ExitCard</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
     <h1>ExitCard</h1>
+
     <p id="month-title"></p>
 
-<div class="week">
-    <button id="prev-week" class="week-arrow">&lt;</button>
 
-    <div id="week-days"></div>
+    <!-- ========================= -->
+    <!-- 日期 -->
+    <!-- ========================= -->
 
-    <button id="next-week" class="week-arrow">&gt;</button>
-</div>
+    <div class="week">
 
-<h2 class="section-title" id="selected-date-title">Today</h2>
+        <button
+            id="prev-week"
+            class="week-arrow">
+            &lt;
+        </button>
 
-<div class="course-form">
-    <select id="course-day">
-        <option value="1">星期一</option>
-        <option value="2">星期二</option>
-        <option value="3">星期三</option>
-        <option value="4">星期四</option>
-        <option value="5">星期五</option>
-        <option value="6">星期六</option>
-        <option value="7">星期日</option>
-    </select>
+        <div id="week-days"></div>
 
-    <input type="time" id="course-time">
-    <input type="text" id="course-name" placeholder="課程名稱">
-    <button id="add-course">+ Add Course</button>
-</div>
+        <button
+            id="next-week"
+            class="week-arrow">
+            &gt;
+        </button>
 
-<div id="course-list"></div>
+    </div>
 
-<h2 class="section-title">Reminder</h2>
 
-<div class="reminder-form">
-    <input type="text" id="reminder-course" placeholder="課程 / 事項">
-    <input type="text" id="reminder-text" placeholder="提醒內容">
-    <button id="add-reminder">+ Add Reminder</button>
-</div>
+    <!-- ========================= -->
+    <!-- 課程 -->
+    <!-- ========================= -->
 
-<div id="reminder-list"></div>
-    <script src="script.js"></script>
-<form
-    id="sync-form"
-    action="http://192.168.0.92/update"
-    method="POST"
-    target="sync-frame"
->
-    <input
-        type="hidden"
-        id="sync-text"
-        name="text"
-        value="ExitCard Test"
-    >
+    <h2
+        class="section-title"
+        id="selected-date-title">
+        Today
+    </h2>
 
-    <form
-    id="sync-form"
-    action="http://192.168.0.92/update"
-    method="POST"
-    target="sync-frame"
->
-    <input
-        type="hidden"
-        id="sync-text"
-        name="text"
-        value=""
-    >
+
+    <div class="course-form">
+
+        <select id="course-day">
+
+            <option value="1">星期一</option>
+            <option value="2">星期二</option>
+            <option value="3">星期三</option>
+            <option value="4">星期四</option>
+            <option value="5">星期五</option>
+            <option value="6">星期六</option>
+            <option value="7">星期日</option>
+
+        </select>
+
+
+        <input
+            type="time"
+            id="course-time">
+
+
+        <input
+            type="text"
+            id="course-name"
+            placeholder="課程名稱">
+
+
+        <button id="add-course">
+            + Add Course
+        </button>
+
+    </div>
+
+
+    <div id="course-list"></div>
+
+
+    <!-- ========================= -->
+    <!-- Reminder -->
+    <!-- ========================= -->
+
+    <h2>Reminder</h2>
+
+    <!-- 固定提醒 -->
+    <div class="reminder-input-row">
+
+        <input
+            type="text"
+            id="reminder-course"
+            placeholder="課程 / 標籤"
+        >
+
+        <input
+            type="text"
+            id="reminder-text"
+            placeholder="固定提醒內容"
+        >
+
+        <button id="add-fixed-reminder">
+            + 固定提醒
+        </button>
+
+    </div>
+
+
+    <!-- 一次性提醒 -->
+    <div class="reminder-input-row">
+
+        <input
+            type="date"
+            id="reminder-date"
+        >
+
+        <input
+            type="text"
+            id="reminder-once-text"
+            placeholder="一次性提醒事項"
+        >
+
+        <button id="add-once-reminder">
+            + 一次性提醒
+        </button>
+
+    </div>
+
+
+    <div id="reminder-list"></div>
+    <!-- ========================= -->
+    <!-- 同步 -->
+    <!-- ========================= -->
 
     <button
         type="button"
         id="sync-exitcard"
-        onclick="syncFrameToExitCard()"
-    >
+        onclick="syncWeekToExitCard()">
         Sync to ExitCard
     </button>
-    <canvas
-    id="epaper-canvas"
-    width="400"
-    height="300"
-    style="border:1px solid #ccc; margin-top:20px;">
-</canvas>
-</form>
 
-<iframe
-    name="sync-frame"
-    style="display:none;">
-</iframe>
+
+    <!-- ========================= -->
+    <!-- 電子紙預覽 -->
+    <!-- ========================= -->
+
+    <canvas
+        id="epaper-canvas"
+        width="400"
+        height="300"
+        style="border:1px solid #ccc; margin-top:20px;">
+    </canvas>
+
+
+    <!-- 隱藏接收 CrowPanel 回傳 -->
+    <iframe
+        name="sync-frame"
+        style="display:none;">
+    </iframe>
+
+
+    <!-- JS 放最後 -->
+    <script src="script.js?v=6"></script>
+
 </body>
 
 </html>
