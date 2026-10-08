@@ -1,0 +1,79 @@
+/* Same theme tokens as the website, kept local to the extension package. */
+:root {
+    color-scheme: light;
+    --paper: #F3EBDD;
+    --surface: #FFFCF5;
+    --ink: #191919;
+    --muted: #59534B;
+    --brand: #A83226;
+    --accent: #F28A36;
+}
+body {
+    background: var(--paper);
+    color: var(--ink);
+}
+h3 {
+    position: relative;
+    isolation: isolate;
+    color: var(--surface);
+    font-weight: 700;
+}
+h3::before {
+    content: '';
+    position: absolute;
+    inset: -6px -8px;
+    z-index: -1;
+    background: var(--ink);
+    box-shadow: 4px 4px 0 var(--brand);
+    pointer-events: none;
+}
+h3::after {
+    content: '';
+    position: absolute;
+    right: 4px;
+    top: 2px;
+    width: 22px;
+    height: 14px;
+    background: var(--accent);
+    transform: rotate(-4deg);
+    pointer-events: none;
+}
+button {
+    border-color: var(--ink);
+    border-style: solid;
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    transition: background-color 120ms ease-out, color 120ms ease-out, box-shadow 120ms ease-out;
+}
+#applyBtn { background: var(--brand); color: var(--surface); }
+button:not(:disabled):hover { background: var(--accent); }
+#applyBtn:not(:disabled):hover { background: #8C281F; }
+button:not(:disabled):active { box-shadow: 1px 1px 0 var(--ink); }
+button:focus-visible {
+    outline: 2px solid var(--surface);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px var(--ink);
+}
+#applyBtn:disabled, button:disabled {
+    color: var(--muted);
+    background: #D9D0C2;
+    border-color: var(--muted);
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 1;
+}
+#status { color: var(--ink); }
+pre {
+    color: var(--muted);
+    background: var(--surface);
+    border-radius: 6px;
+    overflow-wrap: anywhere;
+}
+@media (prefers-reduced-motion: reduce) { button { transition: none; } }
+@media (forced-colors: active) {
+    h3 { color: CanvasText; }
+    h3::before, h3::after { display: none; }
+    button:focus-visible { outline-color: Highlight; }
+}
